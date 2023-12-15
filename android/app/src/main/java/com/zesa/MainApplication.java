@@ -9,6 +9,8 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
+import org.wonday.orientation.OrientationPackage;
+import org.wonday.orientation.OrientationActivityLifecycle;
 
 import com.zesa.USSDPackage;
 
@@ -25,9 +27,22 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          boolean hasOrientationPackage = false;
+          for (ReactPackage reactPackage : packages) {
+            if (reactPackage instanceof OrientationPackage) {
+              hasOrientationPackage = true;
+              break;
+            }
+          }
+        
+          // Add OrientationPackage only if it's not already in the list
+          if (!hasOrientationPackage) {
+            packages.add(new OrientationPackage());
+          }
+        
+          // Add other custom packages if needed
           packages.add(new USSDPackage());
+        
           return packages;
         }
 
@@ -61,5 +76,6 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    registerActivityLifecycleCallbacks(OrientationActivityLifecycle.getInstance());
   }
 }

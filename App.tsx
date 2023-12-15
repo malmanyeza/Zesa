@@ -6,6 +6,7 @@ import { ScreenModalsProvider } from './hooks/modalsContext';
 import { FirebaseProvider } from './hooks/firebaseConext';
 import Stacks from './Stacks';
 import SplashScreen from 'react-native-splash-screen';
+import Orientation from 'react-native-orientation-locker';
 
 const App = () => {
   useEffect(() => {
@@ -17,6 +18,8 @@ const App = () => {
     };
 
     const timeoutId = setTimeout(hideSplashScreen, delayTime);
+
+    Orientation.lockToPortrait();
 
     // Clear the timeout when the component is unmounted
     return () => clearTimeout(timeoutId);
